@@ -1,0 +1,49 @@
+!  
+!-----------------------------------------------------
+!
+!   FALL3D (miniapp): EXAMPLE INPUT FILE
+!
+!-----------------------------------------------------
+!
+--------
+TIME
+--------
+  !
+  RUN_TIME = 1
+  !
+----------
+METEO
+----------
+  !
+  METEO_TYPE = $METEO ! UNIFORM or ROTATIONAL
+  UNIFORM_U  = 2.0
+  UNIFORM_V  = 1.0
+  ROT_OMEGA  = 10.0
+  !
+----
+GRID
+----
+  !
+  NX = 50
+  NY = 50
+  NZ = 30
+  !
+------
+SOURCE
+------
+  !
+  SOURCE_TYPE = $SOURCE ! POINT or LINEAR
+  !
+-------------
+PHYSICS
+-------------
+  !
+  TIME_MARCHING = RK4 ! EULER or RK4
+  KH = 500.0
+  KV = 900.0
+  !
+-------------
+OUTPUT
+-------------
+  !
+  TIME_INTERVAL = 1

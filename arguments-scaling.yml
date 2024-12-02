@@ -1,0 +1,17 @@
+script:
+  class: File
+  path: scripts/fill_template.py
+script_plot:
+  class: File
+  path: scripts/plot_scaling.py
+template:
+  class: File
+  path: templates/miniapp-template.inp
+executable:
+  class: File
+  path: /home/lmingari/fall3d/miniapp/build/Fall3d.x
+source_type: "point"
+meteo_type: "uniform"
+nx: [1,2,1,1]
+ny: [1,1,2,1]
+nz: [1,1,1,2]
