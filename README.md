@@ -46,7 +46,7 @@ cwltool miniapp_strong_scaling.cwl arguments.yml
 ```
 
 It runs the miniapp for different domain decomposition, reports simulation 
-times and generates a plot. As a resulta, you should obtain a suumary table 
+times and generates a plot. As a result, you should obtain a summary table 
 with running times (`summary.csv`) and a figure like this:
 
 ![image](examples/strong_scaling/times.png)
@@ -60,7 +60,7 @@ The block "Run miniapp" represents a subworkflow with the graph representation:
 ![image](base/miniapp_workflow.svg)
 
 ```{note}
-More examples will be added to the folder `examples/`
+More examples will be added to the folder `examples/` in the future
 ```
 
 <!---------{ Links }--------->
