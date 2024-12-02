@@ -16,15 +16,20 @@ inputs:
       position: 1
       prefix: --template
   source_type: 
-    type: string
+    type: string?
     inputBinding:
       position: 2
       prefix: --source
   meteo_type: 
-    type: string
+    type: string?
     inputBinding:
       position: 2
       prefix: --meteo
+  date:
+    type: string?
+    inputBinding:
+      position: 2
+      prefix: --date
 
 outputs:
   configuration:

@@ -33,7 +33,7 @@ outputs:
 
 steps:
   miniapp_configure:
-    run: miniapp_configure.cwl
+    run: configure.cwl
     in:
       template: template
       script: script
