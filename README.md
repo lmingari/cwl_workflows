@@ -16,6 +16,11 @@ cwltool --print-dot workflows/miniapp_scaling.cwl | dot -Tsvg > scaling.svg
 
 ![image](scaling.svg)
 
+In this figure the block "Run miniapp" represents a subworkflow, which can be
+represented as:
+
+![image](workflow.svg)
+
 # Examples
 
 More examples in the folder `workflows/`

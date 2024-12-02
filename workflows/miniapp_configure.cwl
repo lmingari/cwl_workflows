@@ -2,10 +2,7 @@
 cwlVersion: v1.2
 class: CommandLineTool
 
-requirements:
-  InitialWorkDirRequirement:
-    listing:
-      - $(inputs.template)
+label: Set run configuration
 
 baseCommand: python
 
@@ -35,3 +32,8 @@ outputs:
     type: File
     outputBinding:
       glob: "final.inp"
+
+requirements:
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.template)

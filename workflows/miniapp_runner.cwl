@@ -1,11 +1,7 @@
 cwlVersion: v1.2
 class: CommandLineTool
 
-requirements:
-  InlineJavascriptRequirement: {}
-  InitialWorkDirRequirement:
-    listing:
-      - $(inputs.configuration)
+label: Run miniapp
 
 baseCommand: mpirun
 arguments:
@@ -47,3 +43,10 @@ outputs:
       glob: final.res.nc
 
 stdout: final.out
+
+requirements:
+  InlineJavascriptRequirement: {}
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.configuration)
+

@@ -2,6 +2,8 @@
 cwlVersion: v1.2
 class: Workflow
 
+label: Report run information
+
 inputs:
   logging: File
   info: string?
