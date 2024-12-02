@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 cwlVersion: v1.2
-class: Workflow
 
 label: Run miniapp
+class: Workflow
 
 inputs:
   script: File
@@ -58,8 +58,6 @@ steps:
           - nx
           - ny
           - nz
-          - source_type
-          - meteo_type
         valueFrom: "$(self.join())"
     out: [time,summary]
 
@@ -68,4 +66,3 @@ requirements:
   MultipleInputFeatureRequirement: {}
   InlineJavascriptRequirement: {}
   SubworkflowFeatureRequirement: {}
-

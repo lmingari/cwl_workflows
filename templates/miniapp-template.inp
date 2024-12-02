@@ -24,9 +24,9 @@ METEO
 GRID
 ----
   !
-  NX = 50
-  NY = 50
-  NZ = 30
+  NX = 100
+  NY = 100
+  NZ = 60
   !
 ------
 SOURCE

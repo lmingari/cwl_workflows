@@ -1,9 +1,11 @@
 #!/usr/bin/env cwl-runner
 cwlVersion: v1.2
+
+label: Perform a strong scaling for the miniapp
 class: Workflow
 
 inputs:
-  script: File
+  script_template: File
   script_plot: File
   template: File
   executable: File
@@ -26,11 +28,11 @@ outputs:
 
 steps:
   run_scaling:
-    run: miniapp_workflow.cwl
+    run: ../../base/miniapp_workflow.cwl
     scatter: [nx,ny,nz]
     scatterMethod: dotproduct
     in:
-      script: script
+      script: script_template
       template: template
       executable: executable
       source_type: source_type
@@ -41,48 +43,16 @@ steps:
     out: [summary]
 
   generate_table:
-    run:
-      label: Generate summary table
-      class: CommandLineTool
-      baseCommand: printf
-      arguments: 
-        - "%s\n"
-        - "time,nx,ny,nz,source,meteo"
-      inputs:
-        summary: 
-          type: string[]
-          inputBinding: {}
-      outputs:
-        table:
-          type: stdout
-      stdout: "summary.csv"
+    run: ../../base/generate_table.cwl
     in:
       summary: run_scaling/summary
     out: [table]
 
   plot_time:
-    run:
-      label: Plot simulation times
-      class: CommandLineTool
-      baseCommand: python
-      inputs:
-        script_plot:
-          type: File
-          inputBinding:
-            position: 1
-        table:
-          type: File
-          inputBinding:
-            prefix: --input
-            position: 2
-      outputs: 
-        figure:
-          type: File
-          outputBinding:
-            glob: times.png
+    run: ../../base/plot_time.cwl
     in:
       table: generate_table/table
-      script_plot: script_plot
+      script: script_plot
     out: [figure]
 
 requirements:

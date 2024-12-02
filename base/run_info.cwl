@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 cwlVersion: v1.2
-class: Workflow
 
 label: Report run information
+class: Workflow
 
 inputs:
   logging: File

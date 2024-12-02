@@ -1,20 +1,19 @@
 #!/usr/bin/env cwl-runner
 cwlVersion: v1.2
-class: CommandLineTool
 
 label: Set run configuration
+class: CommandLineTool
 
 baseCommand: python
+arguments:
+  - valueFrom: $(inputs.script)
 
 inputs:
-  script:
-    type: File
-    inputBinding:
-      position: 1
+  script: File
   template:
     type: File
     inputBinding:
-      position: 2
+      position: 1
       prefix: --template
   source_type: 
     type: string

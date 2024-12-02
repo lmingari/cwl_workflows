@@ -1,34 +1,33 @@
+#!/usr/bin/env cwl-runner
 cwlVersion: v1.2
-class: CommandLineTool
 
 label: Run miniapp
+class: CommandLineTool
 
 baseCommand: mpirun
 arguments:
   - prefix: -n
     valueFrom: $(inputs.nx * inputs.ny * inputs.nz)
+  - valueFrom: $(inputs.executable)
 
 inputs:
-  executable:
-    type: File
-    inputBinding:
-      position: 1
+  executable: File
   configuration:
     type: File
     inputBinding:
-      position: 2
+      position: 0
   nx:
     type: int
     inputBinding:
-      position: 3
+      position: 1
   ny:
     type: int
     inputBinding:
-      position: 4
+      position: 2
   nz:
     type: int
     inputBinding:
-      position: 5
+      position: 3
 
 outputs:
   stdout:
@@ -36,17 +35,16 @@ outputs:
   logging:
     type: File
     outputBinding:
-      glob: final.Fall3d.log
+      glob: "*.log"
   netcdf:
     type: File
     outputBinding:
-      glob: final.res.nc
+      glob: "*.nc"
 
-stdout: final.out
+stdout: stdout.out
 
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
       - $(inputs.configuration)
-
