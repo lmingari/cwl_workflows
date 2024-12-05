@@ -8,8 +8,7 @@ inputs:
   script: File
   template: File
   executable: File
-  meteo_database: string
-  meteo_file: File
+  meteo: ../../types/custom_types.yaml#MeteoType
   date: string
   nx: int
   ny: int
@@ -33,14 +32,21 @@ steps:
       template: template
       script: script
       date: date
-      meteo_database: meteo_database
-      meteo_file: meteo_file
+      meteo_database:
+        source: meteo
+        valueFrom: $(self.database)
+      meteo_file:
+        source: meteo
+        valueFrom: $(self.file.basename)
+      meteo_dictionary:
+        source: meteo
+        valueFrom: $(self.dictionary.basename)
     out: [configuration]
   runner:
     run: ../../base/runner.cwl
     in:
       executable: executable
-      meteo_file: meteo_file
+      meteo: meteo
       nx: nx
       ny: ny
       nz: nz
@@ -52,6 +58,6 @@ requirements:
   MultipleInputFeatureRequirement: {}
   InlineJavascriptRequirement: {}
   SubworkflowFeatureRequirement: {}
-  InitialWorkDirRequirement:
-    listing:
-      - $(inputs.meteo_file)
+  SchemaDefRequirement:
+    types:
+      - $import: ../../types/custom_types.yaml

@@ -17,32 +17,22 @@ inputs:
       prefix: --template
   source_type: 
     type: string?
-    inputBinding:
-      position: 2
-      prefix: --source
+    inputBinding: {prefix: --source}
   meteo_type: 
     type: string?
-    inputBinding:
-      position: 2
-      prefix: --meteo
+    inputBinding: {prefix: --meteo}
   meteo_database:
     type: string?
     inputBinding: {prefix: --METEO_DATABASE}
   meteo_file:
-    type: File?
-    inputBinding: 
-      prefix: --METEO_PATH
-      valueFrom: $(self.basename)
+    type: string?
+    inputBinding: {prefix: --METEO_FILE}
   meteo_dictionary:
-    type: File?
-    inputBinding:
-      prefix: --METEO_DICTIONARY
-      valueFrom: $(self.basename)
+    type: string?
+    inputBinding: {prefix: --METEO_DICTIONARY}
   date:
     type: string?
-    inputBinding:
-      position: 2
-      prefix: --date
+    inputBinding: {prefix: --date}
 
 outputs:
   configuration:

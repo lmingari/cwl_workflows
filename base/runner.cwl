@@ -12,7 +12,7 @@ arguments:
 
 inputs:
   executable: File
-  meteo_file: File
+  meteo: ../types/custom_types.yaml#MeteoType
   task:
     type: ../types/custom_types.yaml#TaskType
     default: all
@@ -54,7 +54,8 @@ requirements:
   InitialWorkDirRequirement:
     listing:
       - $(inputs.configuration)
-      - $(inputs.meteo_file)
+      - $(inputs.meteo.file)
+      - $(inputs.meteo.dictionary)
   SchemaDefRequirement:
     types:
       - $import: ../types/custom_types.yaml

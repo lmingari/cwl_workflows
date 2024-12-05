@@ -20,7 +20,7 @@ parser.add_argument("--MINIAPP_METEO",
 parser.add_argument("--METEO_DATABASE", 
                     choices=['GFS','ERA5','WRF'],
                     help='Type of meteorological dataset')
-parser.add_argument("--METEO_PATH",
+parser.add_argument("--METEO_FILE",
                     metavar='file',
                     default='',
                     help='Input meteorological file')
