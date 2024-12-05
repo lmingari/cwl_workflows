@@ -1,0 +1,26 @@
+$namespaces:
+  s: https://schema.org/
+
+$graph:
+  - type: enum
+    name: MeteoDatabase
+    symbols:
+      - GFS
+      - ERA5
+      - WRF
+    doc: "Meteorological datasets"
+
+  - type: enum
+    name: TaskType
+    symbols: ["all", "fall3d"]
+    doc: "FALL3D task"
+
+  - type: record
+    name: MeteoType
+    fields:
+      - name: meteo_file
+        type: File
+        doc: "Input meteorological files"
+      - name: database
+        type: MeteoDatabase
+        doc: "Type of meteorological dataset"
