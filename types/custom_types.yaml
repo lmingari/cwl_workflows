@@ -8,19 +8,24 @@ $graph:
       - GFS
       - ERA5
       - WRF
-    doc: "Meteorological datasets"
+    doc: "Meteorological database"
 
   - type: enum
     name: TaskType
-    symbols: ["all", "fall3d"]
+    symbols:
+      - all
+      - fall3d
     doc: "FALL3D task"
 
   - type: record
     name: MeteoType
     fields:
-      - name: meteo_file
+      - name: file
         type: File
         doc: "Input meteorological files"
+      - name: dictionary
+        type: File
+        doc: "Input dictionary for variable decoding"
       - name: database
         type: MeteoDatabase
         doc: "Type of meteorological dataset"

@@ -7,13 +7,14 @@ template:
 executable:
   class: File
   path: /home/lmingari/fall3d/fall3d/builddir/Fall3d.x
-meteo:
-  database: WRF
-  meteo_file:
-    class: File
-    path: /home/lmingari/fall3d/Example-WRF/example-8.0.wrf.nc
-date: '20011112'
-task: fall
+meteo_database: WRF
+meteo_file:
+  class: File
+  path: /home/lmingari/fall3d/Example-WRF/Example-8.0.wrf.nc
+dictionary:
+  class: File
+  path: /home/lmingari/fall3d/fall3d/Other/Meteo/Tables/WRF.tbl
+date: '20080429'
 nx: 2
 ny: 1
 nz: 1

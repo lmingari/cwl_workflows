@@ -25,6 +25,19 @@ inputs:
     inputBinding:
       position: 2
       prefix: --meteo
+  meteo_database:
+    type: string?
+    inputBinding: {prefix: --METEO_DATABASE}
+  meteo_file:
+    type: File?
+    inputBinding: 
+      prefix: --METEO_PATH
+      valueFrom: $(self.basename)
+  meteo_dictionary:
+    type: File?
+    inputBinding:
+      prefix: --METEO_DICTIONARY
+      valueFrom: $(self.basename)
   date:
     type: string?
     inputBinding:

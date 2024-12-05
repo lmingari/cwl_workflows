@@ -12,6 +12,7 @@ arguments:
 
 inputs:
   executable: File
+  meteo_file: File
   task:
     type: ../types/custom_types.yaml#TaskType
     default: all
@@ -40,11 +41,11 @@ outputs:
   logging:
     type: File
     outputBinding:
-      glob: "*.log"
+      glob: "*.Fall3d.log"
   netcdf:
     type: File
     outputBinding:
-      glob: "*.nc"
+      glob: "*.res.nc"
 
 stdout: stdout.out
 
@@ -53,6 +54,7 @@ requirements:
   InitialWorkDirRequirement:
     listing:
       - $(inputs.configuration)
+      - $(inputs.meteo_file)
   SchemaDefRequirement:
     types:
       - $import: ../types/custom_types.yaml

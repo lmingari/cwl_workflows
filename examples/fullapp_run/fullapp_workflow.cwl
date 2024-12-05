@@ -1,4 +1,4 @@
-#!/usr/bin/env cwl-runner
+#!/usr/bin/env cwl-runnerGG
 cwlVersion: v1.2
 
 label: Run fullapp
@@ -8,7 +8,8 @@ inputs:
   script: File
   template: File
   executable: File
-  meteo: ../../types/custom_types.yaml#MeteoType
+  meteo_database: string
+  meteo_file: File
   date: string
   nx: int
   ny: int
@@ -17,33 +18,33 @@ inputs:
 outputs:
   stdout:
     type: File
-    outputSource: fullapp_runner/stdout
+    outputSource: runner/stdout
   logging:
     type: File
-    outputSource: fullapp_runner/logging
+    outputSource: runner/logging
   netcdf:
     type: File
-    outputSource: fullapp_runner/netcdf
+    outputSource: runner/netcdf
 
 steps:
-  fullapp_configure:
+  configure:
     run: ../../base/configure.cwl
     in:
       template: template
       script: script
       date: date
-      meteo_type:
-        source: meteo
-        valueFrom: $(self.database)
+      meteo_database: meteo_database
+      meteo_file: meteo_file
     out: [configuration]
-  fullapp_runner:
-    run: ../../base/fullapp_runner.cwl
+  runner:
+    run: ../../base/runner.cwl
     in:
       executable: executable
+      meteo_file: meteo_file
       nx: nx
       ny: ny
       nz: nz
-      configuration: fullapp_configure/configuration
+      configuration: configure/configuration
     out: [stdout,logging,netcdf]
 
 requirements:
@@ -51,6 +52,6 @@ requirements:
   MultipleInputFeatureRequirement: {}
   InlineJavascriptRequirement: {}
   SubworkflowFeatureRequirement: {}
-  SchemaDefRequirement:
-    types:
-      - $import: ../../types/custom_types.yaml
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.meteo_file)

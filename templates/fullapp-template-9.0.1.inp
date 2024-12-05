@@ -66,11 +66,11 @@
    !    METEO_COUPLING_INTERVAL_(MIN)         : value. Time interval update of meteorological variables (does not apply to velocity)
    !    MEMORY_CHUNK_SIZE                     : value. Size of memory chunks used to store meteo data timesteps. Must be greater than 1
    !
-   METEO_DATA_FORMAT          = WRF
-   METEO_DATA_DICTIONARY_FILE = WRF.tbl
-   METEO_DATA_FILE            = Example.wrf.nc
+   METEO_DATA_FORMAT          = $METEO_DATABASE
+   METEO_DATA_DICTIONARY_FILE = $METEO_DICTIONARY
+   METEO_DATA_FILE            = $METEO_PATH
    METEO_ENSEMBLE_BASEPATH    = 
-   METEO_LEVELS_FILE          = ../Other/Meteo/Tables/L137_ECMWF.levels
+   METEO_LEVELS_FILE          = 
    !
    DBS_BEGIN_METEO_DATA_(HOURS_AFTER_00) = 0
    DBS_END_METEO_DATA_(HOURS_AFTER_00)   = 24
