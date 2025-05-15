@@ -1,4 +1,4 @@
-#!/usr/bin/env cwl-runnerGG
+#!/usr/bin/env cwl-runner
 cwlVersion: v1.2
 
 label: Run fullapp
