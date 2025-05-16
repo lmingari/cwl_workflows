@@ -7,8 +7,6 @@ class: Workflow
 hints:
   DockerRequirement:
     dockerPull: dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
-  ResourceRequirement:
-    coresMax: 4
 
 inputs:
   script_fill: File
