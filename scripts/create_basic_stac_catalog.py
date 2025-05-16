@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from shapely.geometry import Polygon, mapping
 
 #File directory
-data_dir = "./cogs"
+data_dir = "./"
 output_dir = "./stac_catalog"
 
 #Stac catalog creation
