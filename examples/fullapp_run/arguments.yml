@@ -1,21 +1,32 @@
-script:
+script_fill:
   class: File
   path: ../../scripts/fill_template.py
+script_cog:
+  class: File
+  path: ../../scripts/netcdf2cog.py
+script_stac:
+  class: File
+  path: ../../scripts/create_stac.py
 template:
   class: File
   path: ../../templates/fullapp-template-9.0.1.inp
-executable:
-  class: File
-  path: /home/lmingari/fall3d/fall3d/builddir/Fall3d.x
 meteo:
   database: WRF
   file:
     class: File
-    path: /home/lmingari/fall3d/Example-WRF/Example-8.0.wrf.nc
+    path: Example.wrf.nc
   dictionary:
     class: File
-    path: /home/lmingari/fall3d/fall3d/Other/Meteo/Tables/WRF.tbl
+    path: WRF.tbl
 date: '20080429'
 nx: 2
-ny: 1
+ny: 2
 nz: 1
+keys:
+  - tephra_col_mass
+  - tephra_cloud_top
+times:
+  - 5
+  - 9
+stac_path: 'stac_catalog'
+executable: '/home/fall3d-9.1.0/build/bin/Fall3d.GNU.r8.mpi.cpu.x'

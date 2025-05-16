@@ -1,0 +1,46 @@
+|--------------------------------------------|
+|                                            |
+|     FALL3D dictionary for WRF model        |
+|                                            |
+|--------------------------------------------|
+| READ_DIM |  DIM_DBS    |  DIM_WRF          | 
+|--------------------------------------------|
+|    1     |  DIM_LON    |  west_east        |
+|    1     |  DIM_LAT    |  south_north      |
+|    1     |  DIM_LEV    |  bottom_top       |
+|    1     |  DIM_TIME   |  Time             |
+|    1     |  DIM_XSTAGE |  west_east_stag   |
+|    1     |  DIM_YSTAGE |  south_north_stag |
+|    1     |  DIM_ZSTAGE |  bottom_top_stag  |
+|    1     |  DIM_SOILAY |  soil_layers_stag |
+|--------------------------------------------|
+| READ_VAR |  VAR_DBS    |  VAR_WRF          |
+|--------------------------------------------|
+|    1     |  VAR_LON    |  XLONG            |  Longitudes (2D)
+|    1     |  VAR_LAT    |  XLAT             |  Latitudes (2D)
+|    1     |  VAR_LEV    |                   | 
+|    1     |  VAR_TIME   |                   | 
+|    1     |  VAR_TOPO   |  HGT              |  Terrain height
+|    1     |  VAR_LMASK  |  LANDMASK         |  Land-sea mask
+|    1     |  VAR_LUSE   |  LU_INDEX         |  Land use category
+|    1     |  VAR_Z0     |  ZNT              |  Roughness length
+|    1     |  VAR_STIME  |  Times            |  Time as strings
+|    1     |  VAR_PBLH   |  PBLH             |  PBL height
+|    1     |  VAR_UST    |  UST              |  Friction velocity
+|    1     |  VAR_SMOI   |  SMOIS            |  Soil moisture
+|    1     |  VAR_ACCP_G |  RAINNC           | 
+|    1     |  VAR_ACCP_C |  RAINC            | 
+|    1     |  VAR_U10    |  U10              |  U wind component at 10 m
+|    1     |  VAR_V10    |  V10              |  V wind component at 10 m
+|    1     |  VAR_T2     |  T2               |  Temperature at 2 m
+|    1     |  VAR_PSFC   |  PSFC             |  Surface pressure
+|    1     |  VAR_PH     |  PH               |  Perturbation geopotential
+|    1     |  VAR_PHB    |  PHB              |  Base-state geopotential
+|    1     |  VAR_PP     |  P                |  Perturbation pressure
+|    1     |  VAR_PB     |  PB               |  Base-state pressure
+|    1     |  VAR_PTP    |  T                |  Perturbation potential temperature
+|    1     |  VAR_U      |  U                |  U wind component
+|    1     |  VAR_V      |  V                |  V wind component
+|    1     |  VAR_W      |  W                |  Vertical velocity
+|    1     |  VAR_RV     |  QVAPOR           |  Water vapor mixing ratio
+|--------------------------------------------|

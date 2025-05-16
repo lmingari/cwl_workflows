@@ -4,33 +4,38 @@ cwlVersion: v1.2
 label: Run fullapp
 class: Workflow
 
+hints:
+  DockerRequirement:
+    dockerPull: dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
+  ResourceRequirement:
+    coresMax: 4
+
 inputs:
-  script: File
+  script_fill: File
+  script_cog: File
+  script_stac: File
   template: File
-  executable: File
+  executable: string
   meteo: ../../types/custom_types.yaml#MeteoType
   date: string
   nx: int
   ny: int
   nz: int
+  times: int[]
+  keys: string[]
+  stac_path: string
 
 outputs:
-  stdout:
-    type: File
-    outputSource: runner/stdout
-  logging:
-    type: File
-    outputSource: runner/logging
-  netcdf:
-    type: File
-    outputSource: runner/netcdf
+  stac_catalog:
+    type: Directory
+    outputSource: stac/catalog
 
 steps:
   configure:
     run: ../../base/configure.cwl
     in:
       template: template
-      script: script
+      script: script_fill
       date: date
       meteo_database:
         source: meteo
@@ -52,12 +57,31 @@ steps:
       nz: nz
       configuration: configure/configuration
     out: [stdout,logging,netcdf]
+  figures:
+    run: ../../base/generate_cog.cwl
+    scatter: [time,key]
+    scatterMethod: flat_crossproduct
+    in:
+      script: script_cog
+      netcdf: runner/netcdf
+      key: keys
+      time: times
+    out: [tif]
+  stac:
+    run: ../../base/generate_stac.cwl
+    in:
+      script: script_stac
+      netcdf: runner/netcdf
+      tifs: figures/tif
+      path: stac_path
+    out: [catalog]
 
 requirements:
   StepInputExpressionRequirement: {}
   MultipleInputFeatureRequirement: {}
   InlineJavascriptRequirement: {}
   SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
   SchemaDefRequirement:
     types:
       - $import: ../../types/custom_types.yaml
