@@ -5,6 +5,7 @@ import rasterio
 import xarray as xr
 import pystac
 from datetime import datetime, timezone
+from loguru import logger
 from shapely.geometry import Polygon, mapping
 
 #Obtain bbox/footprint from raster (GeoTIFF)
@@ -35,8 +36,6 @@ def get_bbox_and_footprint_from_netcdf(nc_path):
     return bbox, mapping(footprint)
 
 def main(args):
-    print(f"Saving STAC catalog to: {args.path}")
-
     #Stac catalog creation
     catalog = pystac.Catalog(
         id="generic-catalog",
@@ -46,12 +45,12 @@ def main(args):
     #search files and add to catalog
     for filename in os.listdir():
         if filename.endswith(".tif") or filename.endswith(".tiff"):
-            print(f"Processing TIF file: {filename}")
+            logger.debug(f"Processing TIFF file: {filename}")
             bbox, footprint = get_bbox_and_footprint_from_raster(filename)
             media_type = pystac.MediaType.GEOTIFF
             asset_key = "geotiff"
         elif filename.endswith(".nc"):
-            print(f"Processing NetCDF file: {filename}")
+            logger.debug(f"Processing NetCDF file: {filename}")
             bbox, footprint = get_bbox_and_footprint_from_netcdf(filename)
             media_type = "application/x-netcdf"
             asset_key = "netcdf"
@@ -99,9 +98,11 @@ if __name__ == "__main__":
     parser.add_argument("--path", type=str, required=True, help="STAC Catalog folder path")
     args = parser.parse_args()
 
+    logger.info("Creating STAC catalog...")
     if os.path.exists(args.path):
-        print("WARNING: catalog folder already exists and will be removed")
+        logger.warning("Catalog folder already exists and will be removed")
         shutil.rmtree(args.path)
     os.makedirs(args.path)
 
     main(args)
+    logger.info("Done!")

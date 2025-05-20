@@ -5,6 +5,7 @@ import rasterio
 from rasterio.transform import from_origin
 from rasterio.enums import Resampling
 from rasterio.shutil import copy
+from loguru import logger
 import os
 
 def rasterio_save(result_array: np.ndarray, profile, outfile_name, transparency_indexes=None, dtype=rasterio.float32):
@@ -71,13 +72,13 @@ def main(args):
     # Time indexing
     nt = da.sizes['time']
     if args.time == -1:
-        print("Using last time...")
+        logger.info("Using last time...")
         it = nt - 1
     elif args.time < 0:
-        print("Time out of range. Using first time...")
+        logger.warning("Time out of range. Using first time...")
         it = 0
     elif args.time>=nt:
-        print("Time out of range. Using last time...")
+        logger.warning("Time out of range. Using last time...")
         it = nt - 1
     else:
         it = args.time
@@ -115,7 +116,7 @@ def main(args):
 
     # Guardar como Cloud-Optimized GeoTIFF
     fname_out = '-'.join(info_list) + ".tif"
-    print(f"Saving COG GeoTIFF file {fname_out}")
+    logger.info(f"Saving {fname_out}")
     rasterio_save(data, profile, fname_out)
 
 if __name__ == "__main__":
@@ -129,4 +130,6 @@ if __name__ == "__main__":
     parser.add_argument("--selected_intensity_measure_col_mass", type=float, default=0, help="Selected intensity measure column mass")
     args = parser.parse_args()
 
+    logger.info("Creating COG GeoTIFF file...")
     main(args)
+    logger.info("Done!")
