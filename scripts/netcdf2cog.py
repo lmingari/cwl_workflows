@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import xarray as xr
 import numpy as np
