@@ -4,7 +4,7 @@ import argparse
 import xarray as xr
 import numpy as np
 import rasterio
-from rasterio.transform import from_origin
+from rasterio.transform import Affine
 from rasterio.enums import Resampling
 from rasterio.shutil import copy
 from loguru import logger
@@ -95,21 +95,27 @@ def main(args):
     lon = ds.lon.values
 
     # Calcular tamaño de pixel
-    pixel_size_y = abs(lat[1] - lat[0])
-    pixel_size_x = abs(lon[1] - lon[0])
+    pixel_height = ds.lat.cell_measures
+    pixel_width  = ds.lon.cell_measures
 
     # Definir transformación para GeoTIFF
-    top_left_x = lon.min()
-    top_left_y = lat.max()
-    transform = from_origin(top_left_x, top_left_y, pixel_size_x, pixel_size_y)
+    west_lon  = lon[0]
+    south_lat = lat[0]
+    transform = Affine(
+            pixel_width, 
+            0.0, 
+            west_lon,
+            0.0, 
+            pixel_height, 
+            south_lat)
 
     profile = {
         "driver": "GTiff",
         "height": data.shape[0],
-        "width": data.shape[1],
-        "count": 1,
-        "dtype": rasterio.float32,
-        "crs": "EPSG:4326",
+        "width":  data.shape[1],
+        "count":  1,
+        "dtype":  data.dtype,
+        "crs":    "EPSG:4326",
         "transform": transform,
     }
 
