@@ -33,6 +33,33 @@ $graph:
         outputBinding:
           glob: "*.inp"
 
+  - id: phases
+    class: CommandLineTool
+    baseCommand: echo
+    arguments: ["Creating phases file"]
+    inputs:
+      scenario: string
+    outputs:
+      phases:
+        type: File
+        outputBinding:
+          glob: "phases.dat"
+    requirements:
+      InlineJavascriptRequirement: {}
+      InitialWorkDirRequirement:
+        listing:
+          - entryname: "phases.dat"
+            entry: |
+              ${
+                if (inputs.scenario == "high") {
+                  return "0 24 5000";
+                } else if (inputs.scenario == "low") {
+                  return "0 24 1000";
+                } else {
+                  return "0 24 3000";
+                }
+              }
+
   - id: runner
     class: CommandLineTool
     label: Run FALL3D model
@@ -60,6 +87,7 @@ $graph:
         type: int
         inputBinding: {position: 4}
       meteo_file: File
+      phases: File
     outputs:
       stdout:
         type: stdout
@@ -73,14 +101,15 @@ $graph:
         type: File
         outputBinding:
           glob: "*.res.nc"
-    stdout: std.out
-    stderr: std.err
+    stdout: fall3d.out
+    stderr: fall3d.err
     requirements:
       InlineJavascriptRequirement: {}
       InitialWorkDirRequirement:
         listing:
           - $(inputs.inp)
           - $(inputs.meteo_file)
+          - $(inputs.phases)
 
   - id: figures
     class: CommandLineTool
@@ -154,6 +183,11 @@ $graph:
           meteo_database: meteo_database
           date: date
         out: [inp]
+      set_scenario:
+        run: "#phases"
+        in:
+          scenario: scenario
+        out: [phases]
       run_fall3d:
         run: "#runner"
         in:
@@ -162,10 +196,11 @@ $graph:
           ny: ny
           nz: nz
           meteo_file: meteo_file
+          phases: set_scenario/phases
         out: [stdout,stderr,log,netcdf]
 #        requirements:
 #          DockerRequirement:
-#            dockerPull: dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
+#            dockerPull: docker.io/dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
       create_cogs:
         run: "#figures"
         scatter: [time,key]
@@ -188,7 +223,7 @@ $graph:
       NetworkAccess:
         networkAccess: true
 #      DockerRequirement:
-#        dockerPull: dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
+#        dockerPull: docker.io/dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
       ResourceRequirement:
         coresMax: 4
         ramMax: 16000
