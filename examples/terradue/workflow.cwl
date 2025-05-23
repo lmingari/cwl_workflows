@@ -67,7 +67,7 @@ $graph:
     arguments:
       - prefix: -n
         valueFrom: $(inputs.nx * inputs.ny * inputs.nz)
-      - "Fall3d.x"
+      - "Fall3d.GNU.r8.mpi.cpu.x"
 #      - "/home/fall3d-9.1.0/build/bin/Fall3d.GNU.r8.mpi.cpu.x"
     inputs:
       task:
@@ -222,8 +222,8 @@ $graph:
       ScatterFeatureRequirement: {}
       NetworkAccess:
         networkAccess: true
-#      DockerRequirement:
-#        dockerPull: docker.io/dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
+      DockerRequirement:
+        dockerPull: docker.io/dtgeo/get_it_alpine_linux_cpu_demo2:latest
       ResourceRequirement:
         coresMax: 4
         ramMax: 16000
