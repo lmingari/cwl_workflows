@@ -1,9 +1,9 @@
 template:
   class: File
-  path: template.inp
+  path: inputs/template.inp
 meteo_file:
   class: File
-  path: /home/lmingari/fall3d/Example-WRF/Example-8.0.wrf.nc
+  path: inputs/Example.wrf.nc
 meteo_database: 'WRF'
 date: '20080429'
 nx: 2

@@ -68,7 +68,7 @@ $graph:
       - prefix: -n
         valueFrom: $(inputs.nx * inputs.ny * inputs.nz)
       - "Fall3d.GNU.r8.mpi.cpu.x"
-#      - "/home/fall3d-9.1.0/build/bin/Fall3d.GNU.r8.mpi.cpu.x"
+#      - "Fall3d.x"
     inputs:
       task:
         type: string
@@ -198,9 +198,6 @@ $graph:
           meteo_file: meteo_file
           phases: set_scenario/phases
         out: [stdout,stderr,log,netcdf]
-#        requirements:
-#          DockerRequirement:
-#            dockerPull: docker.io/dtgeo/fall3d_alpine_linux_cpu_v9.1.0:latest
       create_cogs:
         run: "#figures"
         scatter: [time,key]
