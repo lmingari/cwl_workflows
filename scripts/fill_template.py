@@ -8,9 +8,11 @@ parser=argparse.ArgumentParser(description="Fill out an input template for minia
 parser.add_argument("--template", required=True, metavar='file', help='Template file to be modified')
 parser.add_argument("--MINIAPP_SOURCE", choices=['point', 'linear'], default='point', help='Type of source definition for miniapp')
 parser.add_argument("--MINIAPP_METEO", choices=['uniform', 'rotational'], default='uniform', help='Type of meteorological data for miniapp')
-parser.add_argument("--METEO_DATABASE", choices=['GFS','ERA5','WRF'], help='Type of meteorological dataset')
+parser.add_argument("--METEO_DATABASE", choices=['GFS','ERA5','WRF'], default='WRF', help='Type of meteorological dataset')
 parser.add_argument("--METEO_FILE", metavar='file', default='', help='Input meteorological file')
 parser.add_argument("--METEO_DICTIONARY", metavar='file', default='', help='Input dictionary for variable decoding')
+parser.add_argument("--INITIAL", choices=['RESTART','NONE'], default='NONE', help='Initial condition')
+parser.add_argument("--RESTART", metavar='file', default='', help='Restart file in netCDF format')
 parser.add_argument("--date", metavar='YYYYMMDD', help='Date string in format YYYYMMDD')
 args=parser.parse_args()
 

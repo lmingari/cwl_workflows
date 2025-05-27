@@ -31,10 +31,10 @@
    YEAR  = $YEAR
    MONTH = $MONTH
    DAY   = $DAY
-   RUN_START_(HOURS_AFTER_00) = 0
+   RUN_START_(HOURS_AFTER_00) = 12
    RUN_END_(HOURS_AFTER_00)   = 24
-   INITIAL_CONDITION          = NONE
-   RESTART_FILE               = Example.rst.nc
+   INITIAL_CONDITION          = $INITIAL
+   RESTART_FILE               = $RESTART
    RESTART_ENSEMBLE_BASEPATH  = ./
    !
  --------------

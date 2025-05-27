@@ -21,6 +21,12 @@ $graph:
       meteo_fname:
         type: string
         inputBinding: {prefix: --METEO_FILE}
+      initial:
+        type: string
+        inputBinding: {prefix: --INITIAL}
+      restart:
+        type: string
+        inputBinding: {prefix: --RESTART}
       date:
         type: string?
         inputBinding: {prefix: --date}
@@ -68,7 +74,6 @@ $graph:
       - prefix: -n
         valueFrom: $(inputs.nx * inputs.ny * inputs.nz)
       - "Fall3d.GNU.r8.mpi.cpu.x"
-#      - "Fall3d.x"
     inputs:
       task:
         type: string
@@ -88,6 +93,7 @@ $graph:
         inputBinding: {position: 4}
       meteo_file: File
       phases: File
+      restart: File
     outputs:
       stdout:
         type: stdout
@@ -109,6 +115,7 @@ $graph:
         listing:
           - $(inputs.inp)
           - $(inputs.meteo_file)
+          - $(inputs.restart)
           - $(inputs.phases)
 
   - id: figures
@@ -160,6 +167,7 @@ $graph:
     inputs:
       template: File
       meteo_file: File
+      restart: File
       meteo_database: string
       date: string
       times: int[]
@@ -168,10 +176,14 @@ $graph:
       ny: int
       nz: int
       scenario: string
+      initial: string
     outputs:
       stac:
         type: Directory
         outputSource: create_catalog/stac
+      log:
+        type: File
+        outputSource: run_fall3d/log
     steps:
       configure:
         run: "#config"
@@ -180,8 +192,12 @@ $graph:
           meteo_fname: 
             source: meteo_file
             valueFrom: $(self.basename)
+          restart:
+            source: restart
+            valueFrom: $(self.basename)
           meteo_database: meteo_database
           date: date
+          initial: initial
         out: [inp]
       set_scenario:
         run: "#phases"
@@ -196,6 +212,7 @@ $graph:
           ny: ny
           nz: nz
           meteo_file: meteo_file
+          restart: restart
           phases: set_scenario/phases
         out: [stdout,stderr,log,netcdf]
       create_cogs:
@@ -220,7 +237,7 @@ $graph:
       NetworkAccess:
         networkAccess: true
       DockerRequirement:
-        dockerPull: docker.io/dtgeo/get_it_alpine_linux_cpu_demo2:latest
+        dockerPull: docker.io/dtgeo/get_it_alpine_linux_cpu_whatif_opt
       ResourceRequirement:
         coresMax: 4
         ramMax: 16000
