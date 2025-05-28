@@ -237,7 +237,7 @@ $graph:
       NetworkAccess:
         networkAccess: true
       DockerRequirement:
-        dockerPull: docker.io/dtgeo/get_it_alpine_linux_cpu_whatif_opt
+        dockerPull: docker.io/dtgeo/get_it_alpine_linux_cpu_whatif_opt:latest
       ResourceRequirement:
         coresMax: 4
         ramMax: 16000
