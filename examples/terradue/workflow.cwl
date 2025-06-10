@@ -16,7 +16,7 @@ $graph:
         type: File
         inputBinding: {prefix: --template}
       meteo_database:
-        type: string
+        type: "#main/MeteoDatabase"
         inputBinding: {prefix: --METEO_DATABASE}
       meteo_fname:
         type: string
@@ -168,7 +168,8 @@ $graph:
       template: File
       meteo_file: File
       restart: File
-      meteo_database: string
+      meteo_database: 
+        type: "#main/MeteoDatabase"
       date: string
       times: int[]
       keys: string[]
@@ -241,3 +242,12 @@ $graph:
       ResourceRequirement:
         coresMax: 4
         ramMax: 16000
+      SchemaDefRequirement:
+        types:
+          - name: MeteoDatabase
+            type: enum
+            symbols:
+              - GFS
+              - WRF
+              - ERA5
+
