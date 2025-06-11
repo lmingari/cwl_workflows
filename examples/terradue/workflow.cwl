@@ -146,7 +146,9 @@ $graph:
     baseCommand: 'create_stac.py'
     arguments: []
     inputs:
-      netcdf: File
+      netcdf: 
+        type: File
+        inputBinding: {prefix: --netcdf}
       tifs: File[]
       scenario:
         type: "#fall3d-what-if/ScenarioType"
@@ -160,7 +162,6 @@ $graph:
       InitialWorkDirRequirement:
         listing:
           - $(inputs.tifs)
-          - $(inputs.netcdf)
 
   - id: fall3d-what-if 
     class: Workflow

@@ -4,11 +4,15 @@ import argparse
 import xarray as xr
 import numpy as np
 import rasterio
+import logging
 from rasterio.transform import Affine
 from rasterio.enums import Resampling
 from rasterio.shutil import copy
-from loguru import logger
 import os
+
+# Configure basic logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("NETCDF2COG")
 
 def rasterio_save(result_array: np.ndarray, profile, outfile_name, transparency_indexes=None, dtype=rasterio.float32):
     """
