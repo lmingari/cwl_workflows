@@ -16,13 +16,13 @@ $graph:
         type: File
         inputBinding: {prefix: --template}
       meteo_database:
-        type: "#main/MeteoDatabase"
+        type: "#fall3d-what-if/MeteoDatabase"
         inputBinding: {prefix: --METEO_DATABASE}
       meteo_fname:
         type: string
         inputBinding: {prefix: --METEO_FILE}
-      initial:
-        type: string
+      initial_condition:
+        type: "#fall3d-what-if/InitialCondition"
         inputBinding: {prefix: --INITIAL}
       restart:
         type: string
@@ -44,7 +44,8 @@ $graph:
     baseCommand: echo
     arguments: ["Creating phases file"]
     inputs:
-      scenario: string
+      scenario: 
+        type: "#fall3d-what-if/ScenarioType"
     outputs:
       phases:
         type: File
@@ -147,21 +148,21 @@ $graph:
     inputs:
       netcdf: File
       tifs: File[]
-      path:
-        type: string
+      scenario:
+        type: "#fall3d-what-if/ScenarioType"
         inputBinding: {prefix: --path}
     outputs:
       stac:
         type: Directory
         outputBinding:
-          glob: $(inputs.path)
+          glob: $(inputs.scenario)
     requirements:
       InitialWorkDirRequirement:
         listing:
           - $(inputs.tifs)
           - $(inputs.netcdf)
 
-  - id: main 
+  - id: fall3d-what-if 
     class: Workflow
     label: Workflow for the what-if scenario demo
     inputs:
@@ -169,15 +170,17 @@ $graph:
       meteo_file: File
       restart: File
       meteo_database: 
-        type: "#main/MeteoDatabase"
+        type: "#fall3d-what-if/MeteoDatabase"
+      initial_condition:
+        type: "#fall3d-what-if/InitialCondition"
+      scenario: 
+        type: "#fall3d-what-if/ScenarioType"
       date: string
       times: int[]
       keys: string[]
       nx: int
       ny: int
       nz: int
-      scenario: string
-      initial: string
     outputs:
       stac:
         type: Directory
@@ -198,7 +201,7 @@ $graph:
             valueFrom: $(self.basename)
           meteo_database: meteo_database
           date: date
-          initial: initial
+          initial_condition: initial_condition
         out: [inp]
       set_scenario:
         run: "#phases"
@@ -230,7 +233,7 @@ $graph:
         in:
           netcdf: run_fall3d/netcdf
           tifs: create_cogs/tif
-          path: scenario
+          scenario: scenario
         out: [stac]
     requirements:
       StepInputExpressionRequirement: {}
@@ -250,4 +253,15 @@ $graph:
               - GFS
               - WRF
               - ERA5
-
+          - name: InitialCondition
+            type: enum
+            symbols:
+              - NONE
+              - RESTART
+              - INSERTION
+          - name: ScenarioType
+            type: enum
+            symbols:
+              - low
+              - medium
+              - high
