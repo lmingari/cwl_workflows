@@ -12,7 +12,7 @@
  CODE
  ----
    !
-   VERSION 9.0
+   VERSION 9.2
    !
  --------
  TIME_UTC
@@ -31,10 +31,10 @@
    YEAR  = $YEAR
    MONTH = $MONTH
    DAY   = $DAY
-   RUN_START_(HOURS_AFTER_00) = 12
-   RUN_END_(HOURS_AFTER_00)   = 24
+   RUN_START_(HOURS_AFTER_00) = $START_TIME
+   RUN_END_(HOURS_AFTER_00)   = $END_TIME
    INITIAL_CONDITION          = $INITIAL
-   RESTART_FILE               = $RESTART
+   RESTART_FILE               = $RESTART_FILE
    RESTART_ENSEMBLE_BASEPATH  = ./
    !
  --------------
@@ -70,10 +70,10 @@
    METEO_DATA_DICTIONARY_FILE = $METEO_DICTIONARY
    METEO_DATA_FILE            = $METEO_FILE
    METEO_ENSEMBLE_BASEPATH    = 
-   METEO_LEVELS_FILE          = 
+   METEO_LEVELS_FILE          = $LEVELS_FILE
    !
-   DBS_BEGIN_METEO_DATA_(HOURS_AFTER_00) = 0
-   DBS_END_METEO_DATA_(HOURS_AFTER_00)   = 24
+   DBS_BEGIN_METEO_DATA_(HOURS_AFTER_00) = $START_TIME
+   DBS_END_METEO_DATA_(HOURS_AFTER_00)   = $END_TIME
    METEO_COUPLING_INTERVAL_(MIN)         = 60
    !
    MEMORY_CHUNK_SIZE = 5
@@ -99,13 +99,13 @@
    !
    HORIZONTAL_MAPPING = SPHERICAL
    VERTICAL_MAPPING   = SIGMA_LINEAR_DECAY
-   LONMIN = 14.0
-   LONMAX = 16.0
-   LATMIN = 36.5
-   LATMAX = 38.5
-   NX = 50
-   NY = 50
-   NZ = 10
+   LONMIN = $LONMIN
+   LONMAX = $LONMAX
+   LATMIN = $LATMIN
+   LATMAX = $LATMAX
+   NX resolution = $DX
+   NY resolution = $DY
+   NZ = $NZ
    ZMAX_(M) = 10000
    !SIGMA_VALUES = 0.0 0.01 0.025 0.05 0.1
    !
@@ -132,7 +132,7 @@
    !     MASS_FRACTION_(%)            : value
    !
    H2O    = Off   MASS_FRACTION_(%) = 2.
-   SO2    = On    MASS_FRACTION_(%) = 1.
+   SO2    = On    MASS_FRACTION_(%) = 0.1
    !
    !     Species of category RADIONUCLIDES
    !     NOTE: all species of RADIONUCLIDES can run simultaneously but are incompatible with a species of category PARTICLES. The
@@ -172,57 +172,18 @@
    !   VISCOSITY_(PAS)       : value. Only used if DISTRIBUTION = ESTIMATE
    !   HEIGHT_ABOVE_VENT_(M) : value. Only used if DISTRIBUTION = ESTIMATE
    !
-   NUMBER_OF_BINS   = 6
-   FI_RANGE         = -2 8
+   NUMBER_OF_BINS   = 21
+   FI_RANGE         = -2 8 
    DENSITY_RANGE    = 1200 2300
    SPHERICITY_RANGE = 0.9  0.9
-   DISTRIBUTION     = GAUSSIAN
+   DISTRIBUTION     = ESTIMATE
      !
      IF_GAUSSIAN    FI_MEAN  = 2.5        FI_DISP = 1.5
      IF_BIGAUSSIAN  FI_MEAN  = 0.25 0.75  FI_DISP = 1.44 1.46  MIXING_FACTOR = 0.5
      IF_WEIBULL     FI_SCALE = 1.0        W_SHAPE = 1.0
      IF_BIWEIBULL   FI_SCALE = 2.0  1.0   W_SHAPE = 2.0  1.0  MIXING_FACTOR = 0.5
      IF_CUSTOM      FILE = my_file.tgsd
-     IF_ESTIMATE    VISCOSITY_(PAS) = 1d6  HEIGHT_ABOVE_VENT_(M) = 20000
-   !
- -------------
- CS137_TGSD
- CS134_TGSD
- I131_TGSD
- SR90_TGSD
- Y90_TGSD
- DUST_TGSD
- -------------
-   !
-   !   This block is read by task SetTgsd to generate tephra Total Grain Size Distributions (TGSD).
-   !   Note that the effective granulometry can change afterwards if aggrgeation is switched-on or if particle
-   !   cut-off (i.e. effective granulometry) are considered
-   !
-   !   NUMBER_OF_BINS        : value
-   !   FI_RANGE              : 2 values
-   !   DENSITY_RANGE         : 2 values (linear interpolation)
-   !   SPHERICITY_RANGE      : 2 values (linear interpolation)
-   !   DISTRIBUTION options  : GAUSSIAN / BIGAUSSIAN / WEIBULL / BIWEIBULL / CUSTOM / ESTIMATE
-   !   FI_MEAN               : value. A second value is used if DISTRIBUTION = BIGAUSSIAN
-   !   FI_DISP               : value. A second value is used if DISTRIBUTION = BIGAUSSIAN
-   !   FI_SCALE              : value. A second value is used if DISTRIBUTION = BIWEIBULL
-   !   W_SHAPE               : value. A second value is used if DISTRIBUTION = BIWEIBULL
-   !   MIXING_FACTOR         : value. Only used if DISTRIBUTION = BIGAUSSIAN/BIWEIBULL. Default value is 0.5
-   !   VISCOSITY_(PAS)       : value. Only used if DISTRIBUTION = ESTIMATE
-   !   HEIGHT_ABOVE_VENT_(M) : value. Only used if DISTRIBUTION = ESTIMATE
-   !
-   NUMBER_OF_BINS   = 11
-   FI_RANGE         = -2 8
-   DENSITY_RANGE    = 1200 2300
-   SPHERICITY_RANGE = 0.9  0.9
-   DISTRIBUTION     = GAUSSIAN
-     !
-     IF_GAUSSIAN    FI_MEAN  = 2.5        FI_DISP = 1.5
-     IF_BIGAUSSIAN  FI_MEAN  = 0.25 0.75  FI_DISP = 1.44 1.46  MIXING_FACTOR = 0.5
-     IF_WEIBULL     FI_SCALE = 1.0        W_SHAPE = 1.0
-     IF_BIWEIBULL   FI_SCALE = 1.0  1.0   W_SHAPE = 1.0  1.0  MIXING_FACTOR = 0.5
-     IF_CUSTOM      FILE = my_file.tgsd
-     IF_ESTIMATE    VISCOSITY_(PAS) = 1d6  HEIGHT_ABOVE_VENT_(M) = 20000
+     IF_ESTIMATE    VISCOSITY_(PAS) = 1d4  HEIGHT_ABOVE_VENT_(M) = 4000
    !
  ---------------------
  PARTICLE_AGGREGATION
@@ -237,8 +198,8 @@
    !   VSET_FACTOR                       : value
    !   FRACTAL_EXPONENT                  : value. Only used if AGGREGATION_MODEL = COSTA
    !
-   PARTICLE_CUT_OFF          = NONE
-   AGGREGATION_MODEL         = PERCENTAGE
+   PARTICLE_CUT_OFF          = D_(MIC)_LARGER_THAN 15
+   AGGREGATION_MODEL         = NONE
    NUMBER_OF_AGGREGATE_BINS  = 2
    DIAMETER_AGGREGATES_(MIC) = 300. 200.
    DENSITY_AGGREGATES_(KGM3) = 350. 250.
@@ -302,10 +263,10 @@ SOURCE
    !
    LON_VENT        = 15.0
    LAT_VENT        = 37.75
-   VENT_HEIGHT_(M) = 3000.
+   VENT_HEIGHT_(M) = 3300.
    !
    HEIGHT_ABOVE_VENT_(M)         = 
-   MASS_FLOW_RATE_(KGS)          = ESTIMATE-MASTIN
+   MASS_FLOW_RATE_(KGS)          = ESTIMATE-WOODHOUSE
    ALFA_PLUME                    = 0.1
    BETA_PLUME                    = 0.5
    EXIT_TEMPERATURE_(K)          = 1200.
@@ -377,12 +338,12 @@ SOURCE
    !
    PERTURBATE_COLUMN_HEIGHT  = RELATIVE
    IF_PERTURBATE_COLUMN_HEIGHT
-      PERTURBATION_RANGE = 20
+      PERTURBATION_RANGE = 30
       PDF                = UNIFORM
    !
-   PERTURBATE_MASS_FLOW_RATE = NO
+   PERTURBATE_MASS_FLOW_RATE = RELATIVE
    IF_PERTURBATE_MASS_FLOW_RATE
-      PERTURBATION_RANGE = 20
+      PERTURBATION_RANGE = 50
       PDF                = UNIFORM
    !
    PERTURBATE_SOURCE_START = NO
@@ -453,17 +414,17 @@ SOURCE
    !  POSTPROCESS_PERCENTILES               options  : YES/NO. If compute percentiles
    !
    POSTPROCESS_MEMBERS      = no
-   POSTPROCESS_MEAN         = no
+   POSTPROCESS_MEAN         = yes
    POSTPROCESS_LOGMEAN      = no
-   POSTPROCESS_MEDIAN       = yes      
+   POSTPROCESS_MEDIAN       = no      
    POSTPROCESS_STANDARD_DEV = no
-   POSTPROCESS_PROBABILITY  = no
+   POSTPROCESS_PROBABILITY  = yes
    POSTPROCESS_PERCENTILES  = no
    !
    IF_POSTPROCESS_PROBABILITY 
       CONCENTRATION_THRESHOLDS_(MG/M3) = 2
-      COLUMN_MASS_THRESHOLDS_(G/M2)    = 1
-      COLUMN_MASS_THRESHOLDS_(DU)      = 100
+      COLUMN_MASS_THRESHOLDS_(G/M2)    = 0.2
+      COLUMN_MASS_THRESHOLDS_(DU)      = 1
       GROUND_LOAD_THRESHOLDS_(KG/M2)   = 1 
    !
    IF_POSTPROCESS_PERCENTILES
@@ -499,7 +460,7 @@ SOURCE
    !
    TERMINAL_VELOCITY_MODEL     = GANSER
    HORIZONTAL_TURBULENCE_MODEL = CMAQ
-   VERTICAL_TURBULENCE_MODEL   constant = 0.0 ! SIMILARITY
+   VERTICAL_TURBULENCE_MODEL   = SIMILARITY
    RAMS_CS                     = 0.2275
    WET_DEPOSITION              = no
    DRY_DEPOSITION              = no
@@ -544,7 +505,7 @@ SOURCE
    !
    PARALLEL_IO                   = no
    LOG_FILE_LEVEL                = FULL
-   RESTART_TIME_INTERVAL_(HOURS) = END_ONLY
+   RESTART_TIME_INTERVAL_(HOURS) = NONE
    OUTPUT_JSON_FILES             = yes
    OUTPUT_INTERMEDIATE_FILES     = no
    OUTPUT_TIME_START_(HOURS)     = RUN_START
