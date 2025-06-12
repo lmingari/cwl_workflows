@@ -1,19 +1,19 @@
-template:
-  class: File
-  path: inputs/template.inp
-meteo_file:
-  class: File
-  path: inputs/Example.wrf.nc
-restart:
-  class: File
-  path: inputs/Example.rst.nc
 meteo_database: 'WRF'
 initial_condition: 'RESTART'
 scenario: 'low'
 date: '20080429'
-nx: 2
-ny: 2
-nz: 1
+start_time: 12
+end_time: 24
+west_lon: 14.0
+east_lon: 16.0
+south_lat: 36.5
+north_lat: 38.5
+dx: 0.1
+dy: 0.1
+nlevels: 10
+nx_mpi: 2
+ny_mpi: 2
+nz_mpi: 1
 keys:
   - tephra_col_mass
   - tephra_cloud_top

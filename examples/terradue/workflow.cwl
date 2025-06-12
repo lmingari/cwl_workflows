@@ -18,7 +18,7 @@ $graph:
       meteo_database:
         type: "#fall3d-what-if/MeteoDatabase"
         inputBinding: {prefix: --METEO_DATABASE}
-      meteo_fname:
+      meteo:
         type: string
         inputBinding: {prefix: --METEO_FILE}
       initial_condition:
@@ -26,10 +26,40 @@ $graph:
         inputBinding: {prefix: --INITIAL}
       restart:
         type: string
-        inputBinding: {prefix: --RESTART}
+        inputBinding: {prefix: --RESTART_FILE}
+      levels:
+        type: string?
+        inputBinding: {prefix: --LEVELS_FILE}
       date:
         type: string?
         inputBinding: {prefix: --date}
+      start_time:
+        type: float
+        inputBinding: {prefix: --START_TIME}
+      end_time:
+        type: float
+        inputBinding: {prefix: --END_TIME}
+      west_lon:
+        type: float
+        inputBinding: {prefix: --LONMIN}
+      east_lon:
+        type: float
+        inputBinding: {prefix: --LONMAX}
+      north_lat:
+        type: float
+        inputBinding: {prefix: --LATMAX}
+      south_lat:
+        type: float
+        inputBinding: {prefix: --LATMIN}
+      dx:
+        type: float
+        inputBinding: {prefix: --DX}
+      dy:
+        type: float
+        inputBinding: {prefix: --DY}
+      nlevels:
+        type: int
+        inputBinding: {prefix: --NZ}
       source_type: 
         type: string?
         inputBinding: {prefix: --source}
@@ -46,6 +76,8 @@ $graph:
     inputs:
       scenario: 
         type: "#fall3d-what-if/ScenarioType"
+      start_time: float
+      end_time: float
     outputs:
       phases:
         type: File
@@ -59,11 +91,11 @@ $graph:
             entry: |
               ${
                 if (inputs.scenario == "high") {
-                  return "0 24 5000";
+                  return [inputs.start_time,inputs.end_time,"5000"].join(' ');
                 } else if (inputs.scenario == "low") {
-                  return "0 24 1000";
+                  return [inputs.start_time,inputs.end_time,"1000"].join(' ');
                 } else {
-                  return "0 24 3000";
+                  return [inputs.start_time,inputs.end_time,"3000"].join(' ');
                 }
               }
 
@@ -92,7 +124,7 @@ $graph:
       nz:
         type: int
         inputBinding: {position: 4}
-      meteo_file: File
+      meteo: File
       phases: File
       restart: File
     outputs:
@@ -104,7 +136,7 @@ $graph:
         type: File
         outputBinding:
           glob: "*.Fall3d.log"
-      netcdf:
+      res:
         type: File
         outputBinding:
           glob: "*.res.nc"
@@ -115,7 +147,7 @@ $graph:
       InitialWorkDirRequirement:
         listing:
           - $(inputs.inp)
-          - $(inputs.meteo_file)
+          - $(inputs.meteo)
           - $(inputs.restart)
           - $(inputs.phases)
 
@@ -167,9 +199,21 @@ $graph:
     class: Workflow
     label: Workflow for the what-if scenario demo
     inputs:
-      template: File
-      meteo_file: File
-      restart: File
+      template:
+        type: File
+        default:
+          class: File
+          location: "inputs/template-demo.inp"
+      meteo: 
+        type: File
+        default:
+          class: File
+          location: "inputs/Example.wrf.nc"
+      restart: 
+        type: File
+        default:
+          class: File
+          location: "inputs/Example.2008-04-29-12-02.rst.nc"
       meteo_database: 
         type: "#fall3d-what-if/MeteoDatabase"
       initial_condition:
@@ -177,62 +221,79 @@ $graph:
       scenario: 
         type: "#fall3d-what-if/ScenarioType"
       date: string
+      start_time: float
+      end_time: float
+      west_lon: float
+      east_lon: float
+      north_lat: float
+      south_lat: float
+      dx: float
+      dy: float
+      nlevels: int
       times: int[]
       keys: string[]
-      nx: int
-      ny: int
-      nz: int
+      nx_mpi: int
+      ny_mpi: int
+      nz_mpi: int
     outputs:
       stac:
         type: Directory
         outputSource: create_catalog/stac
-      log:
-        type: File
-        outputSource: run_fall3d/log
     steps:
       configure:
         run: "#config"
         in:
           template: template
-          meteo_fname: 
-            source: meteo_file
+          meteo: 
+            source: meteo
             valueFrom: $(self.basename)
           restart:
             source: restart
             valueFrom: $(self.basename)
           meteo_database: meteo_database
           date: date
+          start_time: start_time
+          end_time: end_time
+          west_lon: west_lon
+          east_lon: east_lon
+          north_lat: north_lat
+          south_lat: south_lat
+          dx: dx
+          dy: dy
+          nlevels: nlevels
           initial_condition: initial_condition
         out: [inp]
       set_scenario:
         run: "#phases"
         in:
           scenario: scenario
+          start_time: start_time
+          end_time: end_time
         out: [phases]
       run_fall3d:
         run: "#runner"
         in:
           inp: configure/inp
-          nx: nx
-          ny: ny
-          nz: nz
-          meteo_file: meteo_file
+          nx: nx_mpi
+          ny: ny_mpi
+          nz: nz_mpi
+          meteo: meteo
           restart: restart
           phases: set_scenario/phases
-        out: [stdout,stderr,log,netcdf]
+        out: [log,res]
       create_cogs:
         run: "#figures"
         scatter: [time,key]
         scatterMethod: flat_crossproduct
         in:
-          netcdf: run_fall3d/netcdf
+          netcdf: run_fall3d/res
           key: keys
           time: times
         out: [tif]
       create_catalog:
         run: "#catalog"
         in:
-          netcdf: run_fall3d/netcdf
+          netcdf: run_fall3d/res
           tifs: create_cogs/tif
           scenario: scenario
         out: [stac]
