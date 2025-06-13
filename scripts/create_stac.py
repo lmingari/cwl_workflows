@@ -69,12 +69,6 @@ def get_asset_from_filename(filename):
 
 def main(args):
     #
-    # Create STAC catalog
-    #
-    catalog = pystac.Catalog(
-        id          = "generic-catalog",
-        description = "STAC catalog with GeoTIFF and NetCDF")
-    #
     # Get geospatial data
     #
     bbox, geometry = get_bbox_and_footprint_from_netcdf(args.netcdf)
@@ -108,10 +102,19 @@ def main(args):
             item.add_asset(key=key, asset=asset)
             shutil.copy(filename,dst)
     #
+    # Validate item
+    #
+    item.validate()
+    #
+    # Create STAC catalog
+    #
+    catalog = pystac.Catalog(
+        id          = "what-if-demo-catalog",
+        description = "STAC catalog with GeoTIFF and NetCDF")
+    #
     # Add item to catalog
     #
     catalog.add_item(item)
-
     #
     # Save catalog
     #

@@ -15,17 +15,20 @@ $graph:
       template:
         type: string
         inputBinding: {prefix: --template}
+      initial_condition:
+        type: "#fall3d-what-if/InitialCondition"
+        inputBinding: {prefix: --INITIAL}
       meteo_database:
         type: "#fall3d-what-if/MeteoDatabase"
         inputBinding: {prefix: --METEO_DATABASE}
       meteo:
         type: string
         inputBinding: {prefix: --METEO_FILE}
-      initial_condition:
-        type: "#fall3d-what-if/InitialCondition"
-        inputBinding: {prefix: --INITIAL}
+      dictionary:
+        type: string?
+        inputBinding: {prefix: --METEO_DICTIONARY}
       restart:
-        type: string
+        type: string?
         inputBinding: {prefix: --RESTART_FILE}
       levels:
         type: string?
@@ -138,6 +141,10 @@ $graph:
         type: File
         outputBinding:
           glob: "*.res.nc"
+      rst:
+        type: File
+        outputBinding:
+          glob: "*.rst.nc"
     stdout: fall3d.out
     stderr: fall3d.err
     requirements:
@@ -225,11 +232,11 @@ $graph:
         run: "#config"
         in:
           template: 
-            default: "/home/lmingari/Downloads/cwl_workflows/examples/terradue/inputs/template.inp"
+            default: "/home/lmingari/fall3d/cwl_workflows/examples/terradue/inputs/template.inp"
           meteo: 
-            default: "/home/fall3d-9.1.0/Templates/Example.wrf.nc"
+            default: "/home/lmingari/fall3d/cwl_workflows/examples/terradue/inputs/Example.wrf.nc"
           restart:
-            default: "/home/lmingari/Downloads/cwl_workflows/examples/terradue/inputs/Example.2008-04-29-12-02.rst.nc"
+            default: "/home/lmingari/fall3d/cwl_workflows/examples/terradue/inputs/Example.rst.nc"
           meteo_database: meteo_database
           date: date
           start_time: start_time
@@ -258,7 +265,7 @@ $graph:
           ny: ny_mpi
           nz: nz_mpi
           phases: set_scenario/phases
-        out: [log,res]
+        out: [log,res,rst]
       create_cogs:
         run: "#figures"
         scatter: [time,key]

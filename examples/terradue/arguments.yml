@@ -8,8 +8,8 @@ west_lon: 14.0
 east_lon: 16.0
 south_lat: 36.5
 north_lat: 38.5
-dx: 0.1
-dy: 0.1
+dx: 0.04
+dy: 0.04
 nlevels: 10
 nx_mpi: 2
 ny_mpi: 2

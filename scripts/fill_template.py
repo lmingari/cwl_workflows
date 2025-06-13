@@ -36,12 +36,12 @@ if __name__ == "__main__":
     parser.add_argument("--template", required=True, metavar='file', help='Template file to be modified')
     parser.add_argument("--MINIAPP_SOURCE", choices=['point', 'linear'], default='point', help='Type of source definition for miniapp')
     parser.add_argument("--MINIAPP_METEO", choices=['uniform', 'rotational'], default='uniform', help='Type of meteorological data for miniapp')
-    parser.add_argument("--METEO_DATABASE", choices=['GFS','ERA5','WRF'], default='WRF', help='Type of meteorological dataset')
-    parser.add_argument("--METEO_FILE", metavar='file', default='', help='Input meteorological file')
+    parser.add_argument("--METEO_DATABASE", choices=['GFS','ERA5','ERA5ML','WRF'], default='WRF', help='Type of meteorological dataset')
+    parser.add_argument("--METEO_FILE", required=True, metavar='file', help='Input meteorological file')
     parser.add_argument("--METEO_DICTIONARY", metavar='file', default='', help='Input dictionary for variable decoding')
-    parser.add_argument("--INITIAL", choices=['RESTART','NONE'], default='NONE', help='Initial condition')
     parser.add_argument("--RESTART_FILE", metavar='file', default='', help='Restart file in netCDF format')
     parser.add_argument("--LEVELS_FILE", metavar='file', default='', help='Two-columns file with coefficients for hybrid levels')
+    parser.add_argument("--INITIAL", choices=['RESTART','NONE'], default='NONE', help='Initial condition')
     parser.add_argument('--LONMIN', metavar='west_longitude', type=float, help='Domain west longitude')
     parser.add_argument('--LONMAX', metavar='east_longitude', type=float, help='Domain east longitude')
     parser.add_argument('--LATMIN', metavar='south_latitude', type=float, help='Domain south latitude')
@@ -49,10 +49,9 @@ if __name__ == "__main__":
     parser.add_argument('--DX', metavar='longitude_resolution', type=float, help='Domain resolution for longiudes')
     parser.add_argument('--DY', metavar='latitude_resolution', type=float, help='Domain resolution for latitudes')
     parser.add_argument('--NZ', metavar='vertical_levels', type=int, help='Number of vertical levels')
-    parser.add_argument("--date", metavar='YYYYMMDD', help='Reference date in format YYYYMMDD')
     parser.add_argument('--START_TIME', metavar='start_time', type=float, help='Start time in hours since date at 00:00')
     parser.add_argument('--END_TIME', metavar='end_time', type=float, help='End time in hours since date at 00:00')
-
+    parser.add_argument("--date", metavar='YYYYMMDD', help='Reference date in format YYYYMMDD')
     args=parser.parse_args()
     #
     # Main program
