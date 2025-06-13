@@ -13,7 +13,7 @@ $graph:
     arguments: []
     inputs:
       template:
-        type: File
+        type: string
         inputBinding: {prefix: --template}
       meteo_database:
         type: "#fall3d-what-if/MeteoDatabase"
@@ -124,9 +124,7 @@ $graph:
       nz:
         type: int
         inputBinding: {position: 4}
-      meteo: File
       phases: File
-      restart: File
     outputs:
       stdout:
         type: stdout
@@ -147,8 +145,6 @@ $graph:
       InitialWorkDirRequirement:
         listing:
           - $(inputs.inp)
-          - $(inputs.meteo)
-          - $(inputs.restart)
           - $(inputs.phases)
 
   - id: figures
@@ -199,21 +195,6 @@ $graph:
     class: Workflow
     label: Workflow for the what-if scenario demo
     inputs:
-      template:
-        type: File
-        default:
-          class: File
-          location: "inputs/template-demo.inp"
-      meteo: 
-        type: File
-        default:
-          class: File
-          location: "inputs/Example.wrf.nc"
-      restart: 
-        type: File
-        default:
-          class: File
-          location: "inputs/Example.2008-04-29-12-02.rst.nc"
       meteo_database: 
         type: "#fall3d-what-if/MeteoDatabase"
       initial_condition:
@@ -243,13 +224,12 @@ $graph:
       configure:
         run: "#config"
         in:
-          template: template
+          template: 
+            default: "/home/lmingari/Downloads/cwl_workflows/examples/terradue/inputs/template.inp"
           meteo: 
-            source: meteo
-            valueFrom: $(self.basename)
+            default: "/home/fall3d-9.1.0/Templates/Example.wrf.nc"
           restart:
-            source: restart
-            valueFrom: $(self.basename)
+            default: "/home/lmingari/Downloads/cwl_workflows/examples/terradue/inputs/Example.2008-04-29-12-02.rst.nc"
           meteo_database: meteo_database
           date: date
           start_time: start_time
@@ -277,8 +257,6 @@ $graph:
           nx: nx_mpi
           ny: ny_mpi
           nz: nz_mpi
-          meteo: meteo
-          restart: restart
           phases: set_scenario/phases
         out: [log,res]
       create_cogs:
