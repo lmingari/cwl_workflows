@@ -232,11 +232,11 @@ $graph:
         run: "#config"
         in:
           template: 
-            default: "/home/lmingari/fall3d/cwl_workflows/examples/terradue/inputs/template.inp"
+            default: "/app/what-if-demo/template.inp"
           meteo: 
-            default: "/home/lmingari/fall3d/cwl_workflows/examples/terradue/inputs/Example.wrf.nc"
+            default: "/app/what-if-demo/Example.wrf.nc"
           restart:
-            default: "/home/lmingari/fall3d/cwl_workflows/examples/terradue/inputs/Example.rst.nc"
+            default: "/app/what-if-demo/Example.rst.nc"
           meteo_database: meteo_database
           date: date
           start_time: start_time
@@ -288,7 +288,7 @@ $graph:
       NetworkAccess:
         networkAccess: true
       DockerRequirement:
-        dockerPull: docker.io/dtgeo/get_it_alpine_linux_cpu_whatif_opt:latest
+        dockerPull: docker.io/lmingari/what-if-demo:1.0
       ResourceRequirement:
         coresMax: 4
         ramMax: 16000
