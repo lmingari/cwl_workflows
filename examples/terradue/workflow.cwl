@@ -288,7 +288,7 @@ $graph:
       NetworkAccess:
         networkAccess: true
       DockerRequirement:
-        dockerPull: docker.io/lmingari/what-if-demo:1.0
+        dockerPull: docker.io/lmingari/what-if-demo:latest
       ResourceRequirement:
         coresMax: 4
         ramMax: 16000
